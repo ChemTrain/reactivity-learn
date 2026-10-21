@@ -1534,10 +1534,13 @@ const regioQuiz = makeQuiz({
   allName: 'All questions', allDesc: 'Every regioselectivity question, shuffled.',
   defaultAsk: () => 'Where does it react?'
 });
+// for use mid-sentence: 'Diethyl malonyl' -> 'diethyl malonyl', 'tert-Butyl' -> 'tert-butyl'; 'NHC–boryl' and 'N-Boc' stay
+const lowerFirst = n => /^(tert-|sec-|n-)[A-Z][a-z]/.test(n) ? n.replace(/-([A-Z])/, (m, c) => '-' + c.toLowerCase())
+  : /^.[a-z]/.test(n) ? n.charAt(0).toLowerCase() + n.slice(1) : n;
 const radQuiz = makeQuiz({
   key: 'rl.radicals', view: 'radicals', box: '#radicals-box', groups: DATA.radicals || [], partnerLabel: 'With',
   allName: 'All radical questions', allDesc: 'Every philicity and polarity-matching question, shuffled.',
-  defaultAsk: q => q.type === 'classify' ? 'How does this radical usually react?' : `Which partner does the ${q.name.charAt(0).toLowerCase() + q.name.slice(1)} react with faster?`
+  defaultAsk: q => q.type === 'classify' ? 'How does this radical usually react?' : `Which partner does the ${lowerFirst(q.name)} react with faster?`
 });
 const quizFor = v => v === 'sites' ? siteQuiz : v === 'regio' ? regioQuiz : v === 'radicals' ? radQuiz : null;
 $('#lists').addEventListener('click', e => {
