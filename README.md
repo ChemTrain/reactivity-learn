@@ -2,7 +2,7 @@
 
 # Reactivity Learn
 
-Reactivity Learn is a Quizlet-style trainer for nucleophilicity, electrophilicity and regioselectivity in organic chemistry, built on Mayr's reactivity scales. Everything is in one HTML file.
+Reactivity Learn is a Quizlet-style trainer for nucleophilicity, electrophilicity, regioselectivity and radical philicity in organic chemistry, built on Mayr's reactivity scales. Everything is in one HTML file.
 
 **Play it here:** https://chemtrain.github.io/reactivity-learn/reactivity_learn.html
 
@@ -16,15 +16,16 @@ You can also download `reactivity_learn.html` and open it in any browser.
 - Rank: deal 5, 10 or 15 cards from a set and put them in order of N or E; nucleophiles are only compared within one solvent
 - Most reactive: 38 molecules with two to four labelled atoms; pick the one that attacks, or is attacked by, the named partner
 - Reacting?: a nucleophile and an electrophile, and Mayr's rule of thumb (N + E > −5 at 20 °C); the answer works out log k = s<sub>N</sub>(N + E) and the half-life
-- Regioselectivity: 64 questions on aromatic substitution, additions to alkenes and alkynes, enolates and carbonyls, epoxide opening and eliminations, and the protection, deprotection and oxidation of primary, secondary and tertiary alcohols
-- Flashcards, a browsable list of cards, and a Theory page: how N, s<sub>N</sub> and E are measured, how to read them, ambident reactivity, and the conceptual DFT indices (μ, η, ω and Domingo's N) computed from HOMO and LUMO energies, with references
-- Easy and Hard levels: compared values are at least 2.5 units apart on Easy and 1 on Hard, and Easy leaves out the harder Most reactive and Regioselectivity questions
+- Regioselectivity: 70 questions on aromatic substitution, additions to alkenes and alkynes, radical additions and hydrogen-atom transfer (Minisci, Giese), enolates and carbonyls, epoxide opening and eliminations, and the protection, deprotection and oxidation of primary, secondary and tertiary alcohols
+- Radicals: is a radical nucleophilic or electrophilic? 29 carbon- and heteroatom-centred radicals, each with the reason, and 12 polarity-matching questions (which of two partners a radical reacts with faster)
+- Flashcards, a browsable list of cards, and a Theory page: how N, s<sub>N</sub> and E are measured, how to read them, ambident reactivity, the conceptual DFT indices (μ, η, ω and Domingo's N) computed from HOMO and LUMO energies, and radical philicity, with references
+- Easy and Hard levels: compared values are at least 2.5 units apart on Easy and 1 on Hard, and Easy leaves out the harder Most reactive, Regioselectivity and Radicals questions
 
 ## Sources
 
 Every N, s<sub>N</sub> and E value comes from [Mayr's Database of Reactivity Parameters](https://www.cup.lmu.de/oc/mayr/reaktionsdatenbank/) (LMU München). Each card names its database entry and the paper the value was published in; please cite those papers when you use the values, as the database asks. Only entries rated two stars or more are used.
 
-The site and regioselectivity questions and their explanations were written for this app; the explanations of ambident reactivity follow H. Mayr, M. Breugst, A. R. Ofial, *Angew. Chem. Int. Ed.* **2011**, 50, 6470. The Theory page lists its references. Structures are drawn with [RDKit](https://www.rdkit.org).
+The site and regioselectivity questions and their explanations were written for this app; the explanations of ambident reactivity follow H. Mayr, M. Breugst, A. R. Ofial, *Angew. Chem. Int. Ed.* **2011**, 50, 6470. The radical philicity questions follow F. Parsaee, M. C. Senarathna, P. B. Kannangara, S. N. Alexander, P. D. E. Arche, E. R. Welin, *Nat. Rev. Chem.* **2021**, 5, 486 ([doi:10.1038/s41570-021-00284-3](https://doi.org/10.1038/s41570-021-00284-3)). The Theory page lists its references. Structures are drawn with [RDKit](https://www.rdkit.org).
 
 ## How to cite
 
