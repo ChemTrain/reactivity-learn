@@ -12,12 +12,13 @@ You can also download `reactivity_learn.html` and open it in any browser.
 
 - 240 cards in 11 sets: 175 nucleophiles with their N and s<sub>N</sub> (π-nucleophiles, amines and N-heterocycles, phosphines and ylides, hydride donors, carbanions, anions in DMSO and in MeCN, nucleophiles in water) and 65 electrophiles with their E (carbocations and iminium ions, Michael acceptors, heteroatom electrophiles)
 - A 2D structure for each molecule, with the atom that attacks, or is attacked, highlighted
+- Learn: give the N or E of each card (multiple choice, then typed), or name the molecule that has a given value; cards are mastered after two right answers in a row
 - Rank: deal 5, 10 or 15 cards from a set and put them in order of N or E; nucleophiles are only compared within one solvent
-- Will it react?: a nucleophile and an electrophile, and Mayr's rule of thumb (N + E > −5 at 20 °C); the answer works out log k = s<sub>N</sub>(N + E) and the half-life
 - Most reactive: 38 molecules with two to four labelled atoms; pick the one that attacks, or is attacked by, the named partner
+- Reacting?: a nucleophile and an electrophile, and Mayr's rule of thumb (N + E > −5 at 20 °C); the answer works out log k = s<sub>N</sub>(N + E) and the half-life
 - Regioselectivity: 64 questions on aromatic substitution, additions to alkenes and alkynes, enolates and carbonyls, epoxide opening and eliminations, and the protection, deprotection and oxidation of primary, secondary and tertiary alcohols
 - Flashcards, a browsable list of cards, and a Theory page: how N, s<sub>N</sub> and E are measured, how to read them, ambident reactivity, and the conceptual DFT indices (μ, η, ω and Domingo's N) computed from HOMO and LUMO energies, with references
-- Easy and Hard levels: compared values are at least 2.5 units apart on Easy and 1 on Hard, and Easy leaves out the harder site and regioselectivity questions
+- Easy and Hard levels: compared values are at least 2.5 units apart on Easy and 1 on Hard, and Easy leaves out the harder Most reactive and Regioselectivity questions
 
 ## Sources
 
