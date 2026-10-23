@@ -865,7 +865,7 @@ function spreadPick(cards, n, gap) {
 function setLevel(level) {
   if (level === settings.level) return;
   settings.level = level; saveSettings(); syncLevel();
-  refreshQuestion(); if (active) rankDeal(); rxDeal();
+  swapQuestion(); if (active) rankDeal(); rxDeal();
   for (const qz of QUIZZES) { qz.deal(); qz.renderSide(); }  // each draws only in its own tab
 }
 function syncLevel() {
@@ -1005,6 +1005,20 @@ function buildQuestion(card) {
   phase = 'question';
   renderLearn();
 }
+// A new difficulty brings a new card, so a question cannot be looked at again on the easier level.
+function swapQuestion() {
+  if (phase !== 'question' || !cur || cur.answered) return;
+  const inRound = new Set(round.queue.map(c => c.id));
+  const spare = order.filter(c => !inRound.has(c.id) && (settings.ask === 'all' || lvl(c.id) < 3));
+  if (spare.length) {
+    const next = spare[Math.floor(Math.random() * spare.length)];
+    passSeen.delete(cur.card.id); passSeen.add(next.id);
+    round.queue[round.i] = next;
+  } else if (round.queue.length - round.i > 1) round.queue.push(round.queue.splice(round.i, 1)[0]);  // no spare card: ask it last
+  buildQuestion(round.queue[round.i]);
+}
+// a deck dealt again after a difficulty change does not open on the question that was showing
+const notFirst = (deck, q) => { if (q && deck.length > 1 && deck[0] === q) deck.push(deck.shift()); return deck; };
 function refreshQuestion() { if (phase === 'question' && cur && !cur.answered) buildQuestion(cur.card); }
 function grade(given, card) {
   const g = toNum(given);
@@ -1625,7 +1639,7 @@ function makeQuiz(cfg) {
   }
   function deal() {
     // Not mastered: only the questions not yet answered right
-    Q.deck = shuffle(pool(Q.list).filter(q => settings.ask === 'all' || seen[q.id] !== 1)); Q.i = 0; Q.results = []; Q.retry = false;
+    Q.deck = notFirst(shuffle(pool(Q.list).filter(q => settings.ask === 'all' || seen[q.id] !== 1)), Q.cur && Q.cur.q); Q.i = 0; Q.results = []; Q.retry = false;
     if (Q.deck.length) build(); else { Q.phase = 'empty'; render(); }
   }
   function build() {
