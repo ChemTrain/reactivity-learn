@@ -732,11 +732,17 @@ const SETS = DATA.sets.map(s => ({ ...s, cards: s.cards.map(c => ({ ...c, kind: 
 const settings = Object.assign({ level: 'hard', values: 'hidden', qtype: 'mixed', dir: 'value', tol: 1, shuffle: true, eref: 'sce' }, store.get('rl.settings') || {});
 const saveSettings = () => store.set('rl.settings', settings);
 let active = null, view = 'learn';
+// each kind's whole pool comes first and is the default; SETS stays the real sets
+const KIND_ALL = { nu: 'All nucleophiles', el: 'All electrophiles', redox: 'All couples' };
+const PICK = Object.keys(KIND_ALL).flatMap(k => {
+  const own = SETS.filter(s => s.kind === k);
+  return own.length > 1 ? [{ id: 'all-' + k, kind: k, name: KIND_ALL[k], desc: 'Every card in the sets below.', cards: own.flatMap(s => s.cards) }, ...own] : own;
+});
 
 function selectSet(id) {
-  if (!SETS.length) return;
-  active = SETS.find(s => s.id === id) || SETS[0];
-  store.set(P + 'active', active.id);
+  if (!PICK.length) return;
+  active = PICK.find(s => s.id === id) || PICK[0];
+  store.set(P + 'pick', active.id);
   levels = loadLevels(active.id);
   roundNo = store.get(P + 'round.' + active.id) || 1;
   makeOrder(); fcInit(); startRound(); rankDeal();
@@ -750,7 +756,7 @@ function setSolvent(s) {
   return (keys.length > 1 ? 'mostly ' : '') + (SOLVENT[keys[0]] || '');
 }
 function renderSets() {
-  for (const k of ['nu', 'el', 'redox']) if ($('#sets-' + k)) $('#sets-' + k).innerHTML = SETS.filter(s => s.kind === k).map(s => {
+  for (const k of ['nu', 'el', 'redox']) if ($('#sets-' + k)) $('#sets-' + k).innerHTML = PICK.filter(s => s.kind === k).map(s => {
     const lv = s === active ? levels : loadLevels(s.id);
     const n = s.cards.length, m = s.cards.filter(c => (lv[c.id] || 0) === 3).length, share = n ? m / n * 100 : 0;
     return `<button type="button" class="set" data-set="${s.id}" aria-pressed="${s === active}" title="${esc(s.desc)}">
@@ -1106,11 +1112,12 @@ const announce = text => { $('#rank-live').textContent = text; };
 
 // Nucleophiles are only compared within one solvent (the set's main one); E is solvent-independent.
 function rankPool(s) {
-  if (s.kind === 'el') return { cards: s.cards, solvent: '' };
+  const once = cards => { const seen = new Set(); return cards.filter(c => !seen.has(c.term) && seen.add(c.term)); };  // a whole pool can hold a molecule twice
+  if (s.kind === 'el') return { cards: once(s.cards), solvent: '' };
   const counts = {};
   for (const c of s.cards) counts[c.solvent] = (counts[c.solvent] || 0) + 1;
   const top = Object.keys(counts).sort((a, b) => counts[b] - counts[a])[0] || '';
-  return { cards: s.cards.filter(c => c.solvent === top), solvent: top };
+  return { cards: once(s.cards.filter(c => c.solvent === top)), solvent: top };
 }
 function rankDeal() {
   if (!active) return;
@@ -1898,7 +1905,7 @@ for (const el of document.querySelectorAll('.optbar [data-for]'))
 $('#sister-pages').innerHTML = 'Also from ChemTrain: ' + Object.entries(DATA.pages || {}).filter(([k]) => k !== APP)
   .map(([, p]) => `<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.name)}</a>`).join(' and ') + '.';
 applyRef();
-selectSet(store.get(P + 'active') || SETS[0]?.id);
+selectSet(store.get(P + 'pick') || PICK[0]?.id);
 for (const qz of QUIZZES) qz.select(store.get(qz.key + '.list') || 'all');
 rxDeal();
 renderWorked(); renderChart();
