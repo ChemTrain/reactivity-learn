@@ -434,7 +434,7 @@ pre.code { margin: 0; padding: 14px 16px; border-radius: 12px; background: var(-
         <div class="seg" role="group" aria-label="Questions" data-opt="qtype"><button type="button" data-val="mixed" title="Multiple choice until a card is familiar, then typed">Mixed</button><button type="button" data-val="mc">Choices</button><button type="button" data-val="written">Typed</button></div>
       </div>
       <div class="field" data-for="learn">Answer with
-        <div class="seg" role="group" aria-label="Answer with" data-opt="dir"><button type="button" data-val="value" id="dir-value">N or E value</button><button type="button" data-val="term" title="Multiple choice">Name</button></div>
+        <div class="seg" role="group" aria-label="Answer with" data-opt="dir"><button type="button" data-val="all" title="Value and name questions in turn">All</button><button type="button" data-val="value" id="dir-value">N or E value</button><button type="button" data-val="term" title="Multiple choice">Name</button></div>
       </div>
       <div class="field" data-for="learn">Typed answers within
         <div class="seg" role="group" aria-label="Typed answers count within" data-opt="tol"><button type="button" data-val="0">Exact</button><button type="button" data-val="0.5" data-redox="± 0.1 V">± 0.5</button><button type="button" data-val="1" data-redox="± 0.2 V">± 1</button><button type="button" data-val="2" data-redox="± 0.4 V">± 2</button></div>
@@ -729,7 +729,11 @@ function molSVG(i, maxScale, maxH, maxW, ring) {
 
 /* ---------- sets ---------- */
 const SETS = DATA.sets.map(s => ({ ...s, cards: s.cards.map(c => ({ ...c, kind: s.kind, set: s.id, id: s.id + '|' + c.term, e0: c.value })) }));
-const settings = Object.assign({ level: 'hard', values: 'hidden', qtype: 'mixed', dir: 'value', tol: 1, shuffle: true, eref: 'sce' }, store.get('rl.settings') || {});
+const settings = Object.assign({ level: 'hard', values: 'hidden', qtype: 'mixed', dir: 'all', tol: 1, shuffle: true, eref: 'sce' }, store.get('rl.settings') || {});
+if (!settings.allDir) { settings.dir = 'all'; settings.allDir = true; }  // "All" is the new default
+// "All" takes the question types in turn
+let dirTurn = Math.floor(Math.random() * 2);
+const pickDir = () => settings.dir === 'all' ? ['value', 'term'][dirTurn++ % 2] : settings.dir;
 const saveSettings = () => store.set('rl.settings', settings);
 let active = null, view = 'learn';
 // each kind's whole pool comes first and is the default; SETS stays the real sets
@@ -860,17 +864,28 @@ resetBtn.addEventListener('click', () => {
   delete resetBtn.dataset.armed; resetBtn.textContent = resetLabel();
   if (view === 'react') { Object.assign(rxS(), { n: 0, right: 0, streak: 0 }); saveRx(); renderReactSide(); renderReact(); }
   else if (quizFor(view)) quizFor(view).reset();
-  else if (active) { levels = {}; saveLevels(); roundNo = 1; saveRound(); makeOrder(); startRound(); renderCards(); }
+  else if (active) { for (const c of active.cards) delete levels[c.id]; saveLevels(); roundNo = 1; saveRound(); makeOrder(); startRound(); renderCards(); }
 });
 
 /* ---------- learn ---------- */
 const ROUND_SIZE = 7;
 const LEVEL_NAMES = ['Not studied', 'Learning', 'Familiar', 'Mastered'];
 const SCALE = { nu: [-5, 30], el: [-25, 10], redox: [-3, 3] };
-let levels = {}, roundNo = 1, order = [], round = null, cur = null, phase = 'question';
+// One mastery record per card, shared by every set: the whole pool and its sets move together.
+// It starts from the per-set records kept before, taking each card's best level.
+function loadAllLevels() {
+  let all = store.get(P + 'levels');
+  if (!all) {
+    all = {};
+    for (const s of SETS) for (const [k, v] of Object.entries(store.get(P + 'levels' + '.' + s.id) || {})) all[k] = Math.max(all[k] || 0, v);
+    store.set(P + 'levels', all);
+  }
+  return all;
+}
+let levels = loadAllLevels(), roundNo = 1, order = [], round = null, cur = null, phase = 'question';
 const lvl = id => levels[id] || 0;
-const loadLevels = id => store.get(P + 'levels.' + id) || {};
-function saveLevels() { store.set(P + 'levels.' + active.id, levels); renderSets(); }
+const loadLevels = () => levels;
+function saveLevels() { store.set(P + 'levels', levels); renderSets(); }
 function saveRound() { store.set(P + 'round.' + active.id, roundNo); }
 function makeOrder() { order = settings.shuffle ? shuffle(active.cards) : active.cards.slice(); }
 const toNum = s => {
@@ -916,7 +931,7 @@ function distractors(card, n, byTerm) {
 // almost no other card of its set shares is asked by value instead.
 const nameable = card => card.kind === 'el' || active.cards.filter(c => c !== card && c.solvent === card.solvent).length >= 3;
 function buildQuestion(card) {
-  const rev = settings.dir === 'term' && nameable(card);
+  const rev = pickDir() === 'term' && nameable(card);
   let type;
   if (rev || settings.qtype === 'mc') type = 'mc';
   else if (settings.qtype === 'written') type = 'written';
@@ -1096,7 +1111,7 @@ on('#learn-box', 'click', e => {
   else if (t.id === 'dont-know') submitWritten(true);
   else if (t.id === 'override') override();
   else if (t.id === 'next-round') { roundNo++; saveRound(); startRound(); }
-  else if (t.id === 'study-again') { levels = {}; saveLevels(); roundNo = 1; saveRound(); makeOrder(); startRound(); }
+  else if (t.id === 'study-again') { for (const c of active.cards) delete levels[c.id]; saveLevels(); roundNo = 1; saveRound(); makeOrder(); startRound(); }
 });
 on('#learn-box', 'submit', e => { e.preventDefault(); submitWritten(false); });
 
