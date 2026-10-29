@@ -1007,7 +1007,8 @@ function buildQuestion(card) {
 }
 // A new difficulty brings a new card, so a question cannot be looked at again on the easier level.
 function swapQuestion() {
-  if (phase !== 'question' || !cur || cur.answered) return;
+  if (phase !== 'question' || !cur) return;
+  if (cur.answered) return advance();  // a new difficulty applies from the next question on, at once
   const inRound = new Set(round.queue.map(c => c.id));
   const spare = order.filter(c => !inRound.has(c.id) && (settings.ask === 'all' || lvl(c.id) < 3));
   if (spare.length) {
@@ -1019,7 +1020,9 @@ function swapQuestion() {
 }
 // a deck dealt again after a difficulty change does not open on the question that was showing
 const notFirst = (deck, q) => { if (q && deck.length > 1 && deck[0] === q) deck.push(deck.shift()); return deck; };
-function refreshQuestion() { if (phase === 'question' && cur && !cur.answered) buildQuestion(cur.card); }
+// A new question type or answer direction applies at once: an unanswered question is asked again the new way,
+// an answered one gives way to the next question
+function refreshQuestion() { if (phase === 'question' && cur) cur.answered ? advance() : buildQuestion(cur.card); }
 function grade(given, card) {
   const g = toNum(given);
   if (g === null) return { ok: false, exact: false };
