@@ -32,7 +32,7 @@ The site and regioselectivity questions and their explanations were written for 
 
 If you use Reactivity Learn in a course, a worksheet or a paper, please cite it:
 
-> Bindschaedler, Q. *Reactivity Learn* (2026). ChemTrain. https://github.com/ChemTrain/reactivity-learn
+> Bindschaedler, Q. P. *Reactivity Learn* (2026). ChemTrain. https://github.com/ChemTrain/reactivity-learn
 
 GitHub's **Cite this repository** button (from `CITATION.cff`) gives the same reference in APA and BibTeX.
 

@@ -4,7 +4,7 @@ title: "Reactivity Learn"
 type: software
 authors:
   - family-names: Bindschaedler
-    given-names: Quentin
+    given-names: Quentin P.
     affiliation: ChemTrain
 abstract: "A Quizlet-style trainer for nucleophilicity, electrophilicity and regioselectivity in organic chemistry, built on Mayr's reactivity scales, in one HTML file."
 url: "https://chemtrain.github.io/reactivity-learn/reactivity_learn.html"
