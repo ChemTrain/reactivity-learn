@@ -18,7 +18,7 @@ You can also download `reactivity_learn.html` and open it in any browser.
 - Rank: deal 5, 10 or 15 cards from a set and put them in order of N or E; nucleophiles are only compared within one solvent
 - Most reactive: 38 molecules with two to four labelled atoms; pick the one that attacks, or is attacked by, the named partner
 - Reacting?: a nucleophile and an electrophile, and Mayr's rule of thumb (N + E > −5 at 20 °C); the answer works out log k = s<sub>N</sub>(N + E) and the half-life
-- Regioselectivity: 61 questions on aromatic substitution, additions to alkenes and alkynes, dienes and Diels–Alder reactions, enolates and carbonyls, epoxide opening and eliminations, and the protection, deprotection and oxidation of primary, secondary and tertiary alcohols
+- Regioselectivity: 111 questions on aromatic substitution, additions to alkenes and alkynes, dienes and Diels–Alder reactions, enolates and carbonyls, epoxide opening (including trans-diaxial opening of cyclohexene oxides) and eliminations, SN1 against SN2 (including SN2′ and stereochemistry), substitution against elimination, E1, E2 and E1cB, ring closures and Baldwin's rules, which alkene is epoxidised and on which face, and the protection, deprotection and oxidation of primary, secondary and tertiary alcohols
 - Flashcards, a browsable list of cards, and a Theory page: how N, s<sub>N</sub> and E are measured, how to read them, ambident reactivity, and the conceptual DFT indices (μ, η, ω and Domingo's N) computed from HOMO and LUMO energies, with references
 - Easy and Hard levels: compared values are at least 2.5 units apart on Easy and 1 unit on Hard, and Easy leaves out the harder Most reactive and Regioselectivity questions
 
